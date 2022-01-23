@@ -1,0 +1,32 @@
+/*makes menu flush with sides*/
+*{
+    padding:0px;
+    margin: 0;
+}
+body, html{
+    background-color: rgb(51, 50, 50);
+    box-sizing:border-box;
+    font-family:sans-serif;
+}
+.menu-bar{
+    background: #f1b355;
+    text-align:center;
+}
+.menu-bar ul{
+    display:inline-flex;
+    list-style: none;
+    color: #FFFFFF;
+}
+.menu-bar ul li{
+    padding: 20px;
+    margin: 15px;
+    width: 120px;
+}
+.menu-bar ul li a{
+    text-decoration:none;
+    color: #FFFFFF;
+}
+.menu-bar ul li:hover{
+    background:#9e7538;
+    border-radius: 10px;
+}

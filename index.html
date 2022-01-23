@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>PCAPPage</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="styles.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <body>
+        <div class="menu-bar">
+            <ul id="menu-options">
+                <li><a href='#' id="select_home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
+                <li><a href='#' id="select_live"><i class="fa fa-arrows-alt" aria-hidden="true"></i> Live Connections</a>
+                <li><a href='#' id="select_test"><i class="fa fa-arrows-alt" aria-hidden="true"></i> Test App</a>
+                <!--Append New Apps Here-->
+            </ul>
+        </div>
+        <div id="app">
+            <div id="home" hidden=true>Home</div>
+            <div id="live" hidden=true>Live</div>
+            <div id="test" hidden=true>Test</div>
+            <!--Also Append New Apps Here-->
+        </div>
+        <script src='js/menu-interact.js'></script>
+    </body>
+</html>
