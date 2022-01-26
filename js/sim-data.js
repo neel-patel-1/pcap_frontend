@@ -1,7 +1,11 @@
 
-outside_subNets_8 = []
-common_subNets_8 = []
-function samplePacket(){
-    this.srcIp = outside_subNets_8[(Math.random() * subNets_8.size())]+"."+(Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255))
-    this.dstIp = common_subNets_8[(Math.random() * common_subNets_8.size())]+(Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255))
+common_subNets_8 = ["192.168", "10.0"]
+prots = ["FTP", "TELNET", "SMTP", "DNS", "DHCP", "HTTP"]
+function SamplePacket(){
+    let packet = {
+        srcIp: (Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255)) +"."+(Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255)),
+        dstIp: common_subNets_8[Math.floor((Math.random() * common_subNets_8.length))]+"."+(Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255)),
+        prot:  prots[Math.floor(Math.random()*prots.length)]
+    }
+    return packet
 }

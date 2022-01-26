@@ -11,7 +11,7 @@ const tableDiv = document.createElement("div")
 appSegment.appendChild(tableDiv)
 
 let tableHeaders = ["Destination IP" ,"Source IP", "Protocol"] 
-
+let tableSize = 0
 /*
 @pre None
 @post Table added to the app div
@@ -37,23 +37,39 @@ const createTable = () => {
     tableDiv.append(theTable)
 }
 
-const addPacket = (src, dst, prot, row) => {
-    const table = document.querySelector('#liveTable')
-    let tableRow = document.createElement('tr')
-    tableRow.id = 'tableBodyRow'
+/*
+@pre Table appended to the DOM
+@post packet added to the Table
+@returns None
+*/
+const addPacket = (src, dst, prot, numRows) => {
+    if(tableSize < numRows){
+        const table = document.querySelector('#liveTable')
+        let tableRow = document.createElement('tr')
+        tableRow.id = 'tableBodyRow'
 
-    let sourceIp = document.createElement('td')
-    sourceIp.innerText = src
+        let sourceIp = document.createElement('td')
+        sourceIp.innerText = src
 
-    let dstIp = document.createElement('td')
-    dstIp.innerText = dst
+        let dstIp = document.createElement('td')
+        dstIp.innerText = dst
 
-    let protocol = document.createElement('td')
-    protocol.innerText = prot
+        let protocol = document.createElement('td')
+        protocol.innerText = prot
 
-    tableRow.append(dstIp, sourceIp, protocol)
-    table.append(tableRow)
+        tableRow.append(dstIp, sourceIp, protocol)
+        table.append(tableRow)
+        tableSize++
+    }
 }
 
 createTable();
-addPacket("127.0.0.1", "192.168.1.1", "TCP", 1)
+
+// while(1)
+// {
+for (let i=0; i<1000; i++){
+    let packet = SamplePacket()
+    setTimeout(()=> addPacket(packet.srcIp, packet.dstIp, packet.prot, 10), i*1000)
+}
+    
+// }
