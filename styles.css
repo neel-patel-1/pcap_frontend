@@ -8,6 +8,8 @@ body, html{
     box-sizing:border-box;
     font-family:sans-serif;
 }
+
+/*menu styling*/
 .menu-bar{
     background: #f1b355;
     text-align:center;
@@ -29,4 +31,24 @@ body, html{
 .menu-bar ul li:hover{
     background:#9e7538;
     border-radius: 10px;
+}
+
+/*live-data app*/
+#liveData{
+    padding: 0;
+    margin: auto;
+    border-collapse: collapse;
+    width: 80%;
+    text-align: center;
+    color: whitesmoke;
+}
+
+#liveTableHeaderRow{
+    color: darkorange;
+    font-weight: bold;
+    height: 50px;
+}
+
+#tableBody{
+    
 }
