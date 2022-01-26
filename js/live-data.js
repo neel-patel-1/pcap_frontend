@@ -1,3 +1,8 @@
+/*
+Application implementing a dynamic table showing traffic intercepted entering and 
+exiting the Watcher
+*/
+
 /*Selecting the corresponding div for the app*/
 const appSegment = document.querySelector("#live")
 
