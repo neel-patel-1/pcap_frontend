@@ -26,8 +26,29 @@ const createTable = () => {
         tableHeaderRow.append(tableHeadCol)
     })
     tableHead.append(tableHeaderRow)
-    scoreboardTable.append(scoreboardTableHead)
+    theTable.append(tableHead)
     let tableBody = document.createElement('tbody')
     theTable.append(tableBody)
     tableDiv.append(theTable)
 }
+
+const addPacket = (src, dst, prot, row) => {
+    const table = document.querySelector('#liveTable')
+    let tableRow = document.createElement('tr')
+    tableRow.id = 'tableBodyRow'
+
+    let sourceIp = document.createElement('td')
+    sourceIp.innerText = src
+
+    let dstIp = document.createElement('td')
+    dstIp.innerText = dst
+
+    let protocol = document.createElement('td')
+    protocol.innerText = prot
+
+    tableRow.append(dstIp, sourceIp, protocol)
+    table.append(tableRow)
+}
+
+createTable();
+addPacket("127.0.0.1", "192.168.1.1", "TCP", 1)

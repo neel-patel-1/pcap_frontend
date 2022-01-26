@@ -34,7 +34,7 @@ body, html{
 }
 
 /*live-data app*/
-#liveData{
+#liveTable{
     padding: 0;
     margin: auto;
     border-collapse: collapse;
@@ -49,6 +49,5 @@ body, html{
     height: 50px;
 }
 
-#tableBody{
-    
-}
+#liveData tr td {height: 25px;}
+

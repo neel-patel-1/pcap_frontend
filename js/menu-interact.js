@@ -15,6 +15,7 @@ function menuInit(){
     console.log(menu.children[i])
     menu.children[i].addEventListener('click', () =>{
         let showappName = menu.children[i].firstChild.id.slice(7)
+        console.log('show: ', showappName)
         document.querySelector('#' + showappName).hidden = false
         for (let j = 0; j < menu.children.length; j++){
             if(menu.children[j].firstChild.id != menu.children[i].firstChild.id){
@@ -26,3 +27,4 @@ function menuInit(){
     
     }
 }
+menuInit();
