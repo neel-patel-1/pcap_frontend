@@ -12,6 +12,9 @@ appSegment.appendChild(tableDiv)
 
 let tableHeaders = ["Destination IP" ,"Source IP", "Protocol"] 
 let tableSize = 0
+const TABLE_MAX = 10
+let numRows = 10
+
 /*
 @pre None
 @post Table added to the app div
@@ -37,39 +40,31 @@ const createTable = () => {
     tableDiv.append(theTable)
 }
 
+
 /*
 @pre Table appended to the DOM
 @post packet added to the Table
 @returns None
 */
-const addPacket = (src, dst, prot, numRows) => {
-    if(tableSize < numRows){
-        const table = document.querySelector('#liveTable')
-        let tableRow = document.createElement('tr')
-        tableRow.id = 'tableBodyRow'
+const addPacket = (packet) => {
+    const table = document.querySelector('#liveTable')
+    let tableRow = document.createElement('tr')
+    tableRow.id = 'tableBodyRow'
 
-        let sourceIp = document.createElement('td')
-        sourceIp.innerText = src
+    let sourceIp = document.createElement('td')
+    sourceIp.innerText = packet.srcIp
 
-        let dstIp = document.createElement('td')
-        dstIp.innerText = dst
+    let dstIp = document.createElement('td')
+    dstIp.innerText = packet.dstIp
 
-        let protocol = document.createElement('td')
-        protocol.innerText = prot
+    let protocol = document.createElement('td')
+    protocol.innerText = packet.prot
 
-        tableRow.append(dstIp, sourceIp, protocol)
-        table.append(tableRow)
-        tableSize++
-    }
+    tableRow.append(sourceIp, dstIp, protocol)
+    table.append(tableRow)
+    tableSize++
 }
+createTable()
 
-createTable();
-
-// while(1)
-// {
-for (let i=0; i<1000; i++){
-    let packet = SamplePacket()
-    setTimeout(()=> addPacket(packet.srcIp, packet.dstIp, packet.prot, 10), i*1000)
-}
-    
-// }
+/*register app's packet function with the packetStream*/
+packetStream(addPacket)

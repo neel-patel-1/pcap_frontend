@@ -29,5 +29,5 @@ function packetStream(packetResponder){
     genPacket.then( (packet) => {packetResponder(packet); packetStream(packetResponder)} )
 }
 
-function packResponse(packet){console.log(packet)}
-packetStream(packResponse)
+// function packResponse(packet){console.log(packet)}
+// packetStream(packResponse)
