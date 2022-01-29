@@ -1,6 +1,47 @@
 
-common_subNets_8 = ["192.168", "10.0"]
-prots = ["FTP", "TELNET", "SMTP", "DNS", "DHCP", "HTTP"]
+const common_subNets_8 = ["192.168", "10.0"]
+const prots = ["FTP", "TELNET", "SMTP", "DNS", "DHCP", "HTTP"]
+
+/*starter IPs*/
+let dsts = Array.apply(null, Array(5)).map(function () {
+    return (common_subNets_8[Math.floor((Math.random() * common_subNets_8.length))] +
+        +(Math.floor(Math.random() * 255))+"."
+        +(Math.floor(Math.random() * 255)))
+})
+let srcs = Array.apply(null, Array(5)).map(function () {
+    return (Math.floor(Math.random() * 255))+"."
+        +(Math.floor(Math.random() * 255))+"."
+        +(Math.floor(Math.random() * 255))+"."
+        +(Math.floor(Math.random() * 255))
+})
+
+const REPEAT_CHANCE = 0.5
+
+/*
+@pre None
+@post None
+@return Sample Source IP
+*/
+let getSrcIp = () => {
+    if(Math.random() > REPEAT_CHANCE){
+        return (Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255)) +"."+(Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255))
+    }else{
+        return srcs[Math.floor((Math.random() * srcs.length))]
+    } 
+}
+
+/*
+@pre None
+@post None
+@return Sample Destination IP
+*/
+let getDstIp = () => {
+    if(Math.random() > REPEAT_CHANCE){
+        return common_subNets_8[Math.floor((Math.random() * common_subNets_8.length))] +"."+(Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255))
+    }else{
+        return dsts[Math.floor((Math.random() * srcs.length))]
+    } 
+}
 
 /*
 @pre None
@@ -9,10 +50,14 @@ prots = ["FTP", "TELNET", "SMTP", "DNS", "DHCP", "HTTP"]
 */
 function SamplePacket(){
     let packet = {
-        srcIp: (Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255)) +"."+(Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255)),
-        dstIp: common_subNets_8[Math.floor((Math.random() * common_subNets_8.length))]+"."+(Math.floor(Math.random() * 255))+"."+(Math.floor(Math.random() * 255)),
+        srcIp: getSrcIp(),              
+        dstIp: getDstIp(),
         prot:  prots[Math.floor(Math.random()*prots.length)]
     }
+    srcs.push(packet.srcIp)
+    srcs.shift()
+    dsts.push(packet.dstIp)
+    dsts.shift()
     return packet
 }
 
