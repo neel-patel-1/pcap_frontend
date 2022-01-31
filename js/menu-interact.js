@@ -12,7 +12,7 @@ function menuInit(){
     const menu = document.querySelector('#menu-options')
 
     for (let i = 0; i < menu.children.length; i++) {
-    console.log(menu.children[i])
+    // console.log(menu.children[i])
     menu.children[i].addEventListener('click', () =>{
         let showappName = menu.children[i].firstChild.id.slice(7)
         console.log('show: ', showappName)
