@@ -4,7 +4,7 @@ const prots = ["FTP", "TELNET", "SMTP", "DNS", "DHCP", "HTTP"]
 
 /*starter IPs*/
 let dsts = Array.apply(null, Array(5)).map(function () {
-    return (common_subNets_8[Math.floor((Math.random() * common_subNets_8.length))] +
+    return (common_subNets_8[Math.floor((Math.random() * common_subNets_8.length))] + "."
         +(Math.floor(Math.random() * 255))+"."
         +(Math.floor(Math.random() * 255)))
 })
