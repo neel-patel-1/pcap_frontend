@@ -7,11 +7,18 @@ seen by the watcher so far
 appSegment = document.querySelector("#charts")
 
 //create bar chart updating upon arrival of every UPDATE_NUM packets
+let colors = ["red", "green","blue","orange","brown", "purple"]
 
+let UPDATE_NUM = 1
+let ctr = 0
+
+let barDiv 
+let barCanvas
+let barChart
 
 let xValues = prots
 let yValues = prots.map( () => 0)
-let barColors = ["red", "green","blue","orange","brown"];
+let barColors = prots.map( (p,a) => colors[a])
 
 /**
 @pre None
@@ -19,12 +26,13 @@ let barColors = ["red", "green","blue","orange","brown"];
 @returns None
 */
 const createBarChart = () => {
-    let barCanvas = document.createElement("canvas")
+    barDiv = document.createElement('div')
+    barCanvas = document.createElement("canvas")
     barCanvas.setAttribute("style", "width:100%;max-width:700px")
     barCanvas.id = "protBars"
 
     appSegment.appendChild(barCanvas)
-    let barChart = new Chart( "protBars", {
+    barChart = new Chart( "protBars", {
         type: "bar",
         data: {
             labels: xValues,
@@ -37,8 +45,34 @@ const createBarChart = () => {
     })
 }
 
+const updateBarChart = (packet) => {
+    // console.log("chello")
+    console.log(barChart.data.datasets[0].data)
+    // oldData = barChart.data.datasets[0].data
+    barChart.data.datasets[0].data = 
+        barChart.data.datasets[0].data.map( (oldNum, i) => {
+            console.log(packet.prot)
+            if(xValues[i] == packet.prot) return (oldNum + 1)
+            else return (oldNum)
+        } )
+    ctr++
+    if(ctr % UPDATE_NUM == 0){
+        barChart = new Chart( "protBars", {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    backgroundColor: barColors,
+                    data: barChart.data.datasets[0].data
+                }]
+            },
+            options: {}
+        })
+    }
+}
 
 createBarChart()
 
 /*register app's packet function with the packetStream*/
-packetStream(addPacket)
+packetStream(updateBarChart)
+
