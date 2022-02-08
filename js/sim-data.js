@@ -17,6 +17,9 @@ let srcs = Array.apply(null, Array(5)).map(function () {
 
 const REPEAT_CHANCE = 0.5
 
+
+/*-------------------Sim Functions---------------------*/
+
 /*
 @pre None
 @post None
@@ -76,3 +79,19 @@ function packetStream(packetResponder){
 
 // function packResponse(packet){console.log(packet)}
 // packetStream(packResponse)
+
+
+/*-------------------Server Fetch Functions---------------------*/
+const INTERVAL = 2000 //Poll Rate in millis
+
+const queryServer = () =>{
+    fetch("http://localhost:5000/PacketStats", {method: "GET"})
+        .then(response => response.json())
+        .then(result => {
+            console.log('Success:', result)
+            
+        })
+        .catch(error => {
+            console.error('Error:', error)
+        })
+}
