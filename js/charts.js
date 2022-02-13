@@ -71,8 +71,9 @@ const createBarChart = () => {
 }
 
 /*
-
-
+@pre: Bar Chart created
+@param: packet new packet causing chart update
+@post: chart is updated to reflect updated stats
 */
 const updateBarChart = (packet) => {
     barChart.data.datasets[0].data = 
@@ -109,6 +110,8 @@ const createPieChart = () => {
             }]
         },
         options: {
+			resonsive: true,
+			maintainAspectRation: true,
             scales:{
                 beginAtZero:true,
             },
@@ -123,6 +126,11 @@ const createPieChart = () => {
 }
 
 
+/*
+@pre: Pie Chart created
+@param: packet new packet causing chart update
+@post: chart is updated to reflect updated stats
+*/
 const updatePieChart = (packet) => {
     pieChart.data.datasets[0].data = 
         pieChart.data.datasets[0].data.map( (oldNum, i) => {
