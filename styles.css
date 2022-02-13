@@ -55,3 +55,18 @@ table.liveTable td:hover {background: orangered;}
 
 /*charts app*/
 
+.grid-container {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	grid-gap: 20px;
+}
+.box {
+	border: 5px solid gray;
+	box-sizing: border-box;
+	position: relative;
+	width: 99.9%;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	grid-gap: 10px;
+}
+
