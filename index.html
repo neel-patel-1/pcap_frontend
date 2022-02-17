@@ -13,6 +13,7 @@
                 <li><a href='#' id="select_home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
                 <li><a href='#' id="select_live"><i class="fa fa-arrows-alt" aria-hidden="true"></i> Live Connections</a>
                 <li><a href='#' id="select_charts"><i class="fa fa-arrows-alt" aria-hidden="true"></i> Test App</a>
+                <li><a href='#' id="select_packet"><i class="fa fa-arrows-alt" aria-hidden="true"></i> Packet Visualizer</a>
                 <!--Append New Apps Here-->
             </ul>
         </div>
@@ -22,11 +23,13 @@
             <div id="home" hidden=true></div>
             <div id="live" hidden=true></div>
             <div id="charts" hidden=true>
+            <!--Chart elements -->
 				<div id="grid-container" >
 					<div class="box" id="ch1"></div>
 					<div class="box" id="ch2"></div>
 				</div>
 			</div>
+            <div id="packet" hidden="true"></div>
 			<!--Also Append New Apps Here-->
 		</div>
 
@@ -38,5 +41,6 @@
         <script src='js/sim-data.js'></script>
         <script src='js/live-data.js'></script>
         <script src='js/charts.js'></script>
+        <script src='js/packet-vis.js'></script>
     </body>
 </html>

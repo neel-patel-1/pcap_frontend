@@ -85,12 +85,19 @@ function packetStream(packetResponder){
 const INTERVAL = 2000 //Poll Rate in millis
 
 const queryServer = () =>{
-    fetch("http://localhost:5000/PacketStats", {method: "GET"})
-        .then(response => response.json())
-        .then(result => {
-            console.log('Success:', result)
-        })
-        .catch(error => {
-            console.error('Error:', error)
-        })
+    setTimeout(
+        () => {
+            fetch("http://localhost:5000/PacketStats", {method: "GET"})
+            .then(response => response.json())
+            .then(result => {
+                // if(result != null)
+                console.log(result)
+            })
+            .catch(error => {
+                console.error('Error:', error)
+            })
+            queryServer();
+        },
+    INTERVAL)
 }
+queryServer();
