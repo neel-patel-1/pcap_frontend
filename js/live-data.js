@@ -4,7 +4,7 @@ exiting the Watcher
 */
 
 /*Selecting the corresponding div for the app*/
-let appSegment = document.querySelector("#live")
+appSegment = document.querySelector("#live")
 
 /*App specific code -- all elements appended to the app segment*/
 const tableDiv = document.createElement("div")

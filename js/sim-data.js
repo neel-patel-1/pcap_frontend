@@ -83,6 +83,8 @@ function packetStream(packetResponder){
 
 /*-------------------Server Fetch Functions---------------------*/
 const INTERVAL = 2000 //Poll Rate in millis
+let lID = 0 // last seen packet
+let samp
 
 const queryServer = () =>{
     setTimeout(
@@ -90,8 +92,30 @@ const queryServer = () =>{
             fetch("http://localhost:5000/PacketStats", {method: "GET"})
             .then(response => response.json())
             .then(result => {
-                // if(result != null)
-                console.log(result)
+                if(result != null)
+                {
+                    console.log(result)
+                    samp = result
+                }
+                else
+                    queryServer()
+            })
+            .catch(error => {
+                console.error('Error:', error)
+            })
+        },
+    INTERVAL)
+}
+
+const livePacketStream = (callback) => {
+    setTimeout(
+        () => {
+            fetch("http://localhost:5000/PacketStats", {method: "GET"})
+            .then(response => response.json())
+            .then(result => {
+                if(result["id"] > lID){//ensure packet is new
+                    callback(result["packet"])
+                }
             })
             .catch(error => {
                 console.error('Error:', error)
