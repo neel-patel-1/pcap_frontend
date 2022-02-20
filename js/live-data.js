@@ -10,7 +10,7 @@ appSegment = document.querySelector("#live")
 const tableDiv = document.createElement("div")
 appSegment.appendChild(tableDiv)
 
-let tableHeaders = ["Destination IP" ,"Source IP", "Protocol"] 
+let tableHeaders = ["Destination IP" ,"Port", "Source IP",  "Port", "Type"]
 let tableSize = 0
 let TABLE_MAX = 3
 
@@ -40,7 +40,6 @@ const createTable = () => {
     tableDiv.append(theTable)
 }
 
-
 /**
 @pre Table appended to the DOM
 @post packet added to the Table
@@ -50,21 +49,37 @@ const addPacket = (packet) => {
     const tableBody = document.querySelector('.liveTableBody')
     let tableRow = document.createElement('tr')
     tableRow.id = 'tableBodyRow'
+    
+    let sessCheck = packet[4].split(",")[0].split(" ")[0]
 
+    if(tableBody.childElementCount  < TABLE_MAX
+    		&& sessCheck == "TCP"){
+        //parse pack info
+        let TCPInf = packet[4].split(",")
+        let srcP = TCPInf[2].split(":")[1]
+        let dstP = TCPInf[2].split(":")[1]
+        let t = TCPInf[1]
+        
+        let netInf = packet[3].split(",")
+        let srcIp = netInf[1].split(":")[1]
+        let dstIp = netInf[2].split(":")[1]
+        
+        let sourceIp = document.createElement('td') 
+        sourceIp.innerText = srcIp
+        
+        let sourcePort = document.createElement('td') 
+        sourcePort.innerText = srcP
 
-    if(tableBody.childElementCount  < TABLE_MAX){ //max number of rows
-        //create new table entry
-        let sourceIp = document.createElement('td')
-        sourceIp.class = 
-        sourceIp.innerText = packet.srcIp
+        let destIp = document.createElement('td')
+        destIp.innerText = dstIp
+        
+        let dstPort = document.createElement('td') 
+        dstPort.innerText = dstP
 
-        let dstIp = document.createElement('td')
-        dstIp.innerText = packet.dstIp
+        let type = document.createElement('td')
+        type.innerText = t
 
-        let protocol = document.createElement('td')
-        protocol.innerText = packet.prot
-
-        tableRow.append(dstIp, sourceIp, protocol)
+        tableRow.append(destIp, dstPort, sourceIp, sourcePort, type)
         tableBody.append(tableRow)
         tableSize++
     }
@@ -89,15 +104,27 @@ const replacePacket = (packet) => {
     //search table for packet with matching source or dst ip
     let children = document.querySelector('.liveTableBody').children
     let fields; //row we are selecting
+
+    //Parse Packet
+    let TCPInf = packet[4].split(",")
+    let srcP = TCPInf[2].split(":")[1]
+    let dstP = TCPInf[2].split(":")[1]
+    let t = TCPInf[1]
+    
+    let netInf = packet[3].split(",")
+    let srcIp = netInf[1].split(":")[1]
+    let dstIp = netInf[2].split(":")[1]
+
+
     for (let i = 1; i < children.length; i++) {
         fields = children[i].children;//check each row
         for(let j=0; j<2; j++){
-            if(fields[j].innerText == packet.srcIp || fields[j].innerText == packet.dstIp)
+            if(fields[j].innerText == srcIp || fields[j].innerText == dstIp)
             {//row replaced by newer connection
                 fields.id = 'moveUp'
                 // console.log("replace row ", i, " ip: ", fields[j].innerText)
-                fields[1].innerText = packet.srcIp
-                fields[0].innerText = packet.dstIp
+                fields[1].innerText = srcIp
+                fields[0].innerText = dstIp
                 return true
             }
         }
@@ -105,8 +132,7 @@ const replacePacket = (packet) => {
     return false
 }
 
-
 createTable()
 
 /*register app's packet function with the packetStream*/
-packetStream(addPacket)
+livePacketStream(addPacket)
