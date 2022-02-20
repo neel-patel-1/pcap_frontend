@@ -31,13 +31,12 @@ let barColors = prots.map( (p,a) => colors[a])
 @returns None
 */
 const createBarChart = () => {
-    barCanvas = document.createElement("canvas")
-    barCanvas.id = "protBars"
+    barCanvas = document.getElementById("barCanvas")
+    const barCtx = barCanvas.getContext('2d')
 
-	//barCanvas.setAttribute("style", "max-width:700px")
+	barCanvas.setAttribute("width", "400px")
 
-    document.querySelector("#ch1").appendChild(barCanvas)
-    barChart = new Chart( "protBars", {
+    barChart = new Chart( barCtx, {
         type: "bar",
         data: {
             labels: xValues,
@@ -63,7 +62,7 @@ const createBarChart = () => {
 			layout: {
 				padding: {
 					top: 10
-					}
+				}
 			}
             
         }
@@ -95,12 +94,10 @@ let pieChart
 let piectr = 0
 /*Protocol Pie Chart*/
 const createPieChart = () => {
-    pieCanvas = document.createElement("canvas")
-    pieCanvas.id = "protPie"
-
-    document.querySelector("#ch2").appendChild(pieCanvas)
-
-    pieChart = new Chart( "protPie", {
+    
+    pieCanvas=document.getElementById("pieCanvas")
+    pieCtx = pieCanvas.getContext('2d')
+    pieChart = new Chart( pieCtx, {
         type: "doughnut",
         data: {
             labels: xValues,
@@ -115,9 +112,9 @@ const createPieChart = () => {
             scales:{
                 beginAtZero:true,
             },
-            legend:{
-                display: false
-            },
+            legend: { display: true },
+            tooltips: {enabled: false},
+            hover: {mode: null},
             animation: {
                 duration: 0, // general animation time
             }

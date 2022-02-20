@@ -57,7 +57,7 @@ const addPacket = (packet) => {
         //parse pack info
         let TCPInf = packet[4].split(",")
         let srcP = TCPInf[2].split(":")[1]
-        let dstP = TCPInf[2].split(":")[1]
+        let dstP = TCPInf[3].split(":")[1]
         let t = TCPInf[1]
         
         let netInf = packet[3].split(",")

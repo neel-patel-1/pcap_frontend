@@ -64,10 +64,10 @@ function SamplePacket(){
     return packet
 }
 
-/*
+/**
 @pre None
 @param packetResponder is a function taking a packet object as an argument
-@post packetResponder is called upon arrival of a packet
+@post packetResponder is called upon arrival of a packet (associates callbacks with simulated packets)
 @return none
 */
 function packetStream(packetResponder){
@@ -85,37 +85,24 @@ function packetStream(packetResponder){
 const INTERVAL = 2000 //Poll Rate in millis
 let lID = 0 // last seen packet
 let samp
+let callbacks = []
 
+/**
+ * @post all registered callbacks executed with packet argument from server query every INTERVAL
+ * milliseconds
+ */
 const queryServer = () =>{
     setTimeout(
         () => {
             fetch("http://localhost:5000/PacketStats", {method: "GET"})
             .then(response => response.json())
             .then(result => {
-                if(result != null)
-                {
-                    console.log(result)
-                    samp = result
-                }
-                else
-                    queryServer()
-            })
-            .catch(error => {
-                console.error('Error:', error)
-            })
-        },
-    INTERVAL)
-}
-
-const livePacketStream = (callback) => {
-    setTimeout(
-        () => {
-            fetch("http://localhost:5000/PacketStats", {method: "GET"})
-            .then(response => response.json())
-            .then(result => {
                 if(result["id"] > lID){//ensure packet is new
-                    callback(result["packet"])
-                    lID = result["id"]
+                    callbacks.map( (callback) => 
+                    {
+                        callback(result["packet"])
+                        lID = result["id"] 
+                    })
                 }
             })
             .catch(error => {
@@ -124,5 +111,17 @@ const livePacketStream = (callback) => {
             queryServer();
         },
     INTERVAL)
+}
+
+/**
+ * 
+ * @param {*} callback Function to register -- called upon every server query for new packets
+ * @pre None
+ * @post function will be called on server query with packet argument
+ */
+
+const livePacketStream = (callback) => {
+    callbacks.push(callback) // register to set of functions needed to be called
+    
 }
 queryServer();
