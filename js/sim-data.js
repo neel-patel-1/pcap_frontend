@@ -115,6 +115,7 @@ const livePacketStream = (callback) => {
             .then(result => {
                 if(result["id"] > lID){//ensure packet is new
                     callback(result["packet"])
+                    lID = result["id"]
                 }
             })
             .catch(error => {
