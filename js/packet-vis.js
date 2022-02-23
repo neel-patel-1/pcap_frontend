@@ -35,7 +35,7 @@ const drawLayer = (x, width, text) => {
     ctx.font = `${fontSize}px system-ui bold`
     
 
-    console.log(text.split(" ")[0])
+    // console.log(text.split(" ")[0])
     if(!protColor.has(text.split(" ")[0])){
         protColor.set(text.split(" ")[0], generateDarkColorHex())
     }

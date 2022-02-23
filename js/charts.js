@@ -10,7 +10,8 @@ https://stackoverflow.com/questions/57090660/resizing-chart-issue-with-css-grid
 
 /*Selecting the corresponding div for the app*/
 //create bar chart updating upon arrival of every UPDATE_NUM packets
-let colors = ["red", "green","blue","orange","brown", "purple"]
+let pieColors = ["red", "green","blue"]
+let barColors = ["orange","brown", "purple"]
 
 let UPDATE_NUM = 1
 
@@ -20,10 +21,8 @@ let barCanvas
 let barChart
 let barctr = 0
 
-let xValues = prots
-let yValues = prots.map( () => 0)
-
-let barColors = prots.map( (p,a) => colors[a])
+let xValues = [] 
+let yValues = []
 
 /**
 @pre None
@@ -50,7 +49,11 @@ const createBarChart = () => {
         },
         options: {
             scales:{
-                beginAtZero:true,
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
             },
             legend:{
                 display: false
@@ -76,12 +79,41 @@ const createBarChart = () => {
 @post: chart is updated to reflect updated stats
 */
 const updateBarChart = (packet) => {
-    barChart.data.datasets[0].data = 
-        barChart.data.datasets[0].data.map( (oldNum, i) => {
-            if(xValues[i] == packet.prot) return (oldNum + 1)
-            else return (oldNum)
-        } )
-    barctr++
+    /*find unseen ULPs in the packet data*/
+    if(Object.keys(packet).find((l) => l==5 || l==6 || l==7)){
+        if(packet[5] != null){
+            let l5 = packet[5].split(" ")[0]
+            if( !(xValues.find((k) => k == l5)) ){
+                // console.log("new l5")
+                xValues.push(l5)
+                yValues.push(1)
+            }else{
+                yValues[xValues.indexOf(l5)]++
+            }
+        }
+        if(packet[6] != null){
+            let l6 = packet[6].split(" ")[0]
+            if( !(xValues.find((k) => k == l6)) ){
+                // console.log("new l6")
+                xValues.push(l6)
+                yValues.push(1)
+            }else{
+                yValues[xValues.indexOf(l6)]++
+            }
+        }
+        if(packet[7] != null){
+            let l7 = packet[7].split(" ")[0]
+            if( !(xValues.find((k) => k == l7))){
+                // console.log("new l7")
+                xValues.push(l7)
+                yValues.push(1)
+            }else{
+                yValues[xValues.indexOf(l7)]++
+            }
+        }
+        console.log(xValues, yValues)
+    }
+    
     if(barctr % UPDATE_NUM == 0){
         barChart.update()
     }
@@ -93,6 +125,8 @@ const updateBarChart = (packet) => {
 let pieCanvas
 let pieChart
 let piectr = 0
+let xLLP = []
+let yLLP = []
 /*Protocol Pie Chart*/
 const createPieChart = () => {
     
@@ -105,10 +139,10 @@ const createPieChart = () => {
     pieChart = new Chart( pieCtx, {
         type: "doughnut",
         data: {
-            labels: xValues,
+            labels: xLLP,
             datasets: [{
-                backgroundColor: barColors,
-                data: yValues
+                backgroundColor: pieColors,
+                data: yLLP
             }]
         },
         options: {
@@ -134,11 +168,19 @@ const createPieChart = () => {
 @post: chart is updated to reflect updated stats
 */
 const updatePieChart = (packet) => {
-    pieChart.data.datasets[0].data = 
-        pieChart.data.datasets[0].data.map( (oldNum, i) => {
-            if(xValues[i] == packet.prot) return (oldNum + 1)
-            else return (oldNum)
-        } )
+    if(Object.keys(packet).find((l) => l==4)){
+        if(packet[4] != null){
+            let l4 = packet[4].split(" ")[0]
+            if( !(xLLP.find((k) => k == l4)) ){
+                console.log("new l4")
+                xLLP.push(l4)
+                yLLP.push(1)
+            }else{
+                yLLP[xLLP.indexOf(l4)]++
+            }
+        }
+        
+    }
     piectr++
     if(piectr % UPDATE_NUM == 0){
         pieChart.update()
@@ -154,7 +196,7 @@ let lineCanvas
 let lineChart
 let linectr = 0
 
-let lineColors = prots.map( (p,a) => colors[a])
+let lineColors = prots.map( (p,a) => "0xff0000")
 
 /**
 @pre None
@@ -201,6 +243,16 @@ const createlineChart = () => {
     })
 }
 
+
+/* Line chart needs to control its own x axis to keep time intervals consistent*/
+const startLine = () => {
+    setInterval(() => {
+        times.push((new Date().getTime()) - stTime.getTime())
+        numpktsarr.push(numpkts)
+        lineChart.update()
+    }, INTERVAL)
+}
+
 /*
 @pre: line Chart created
 @param: packet new packet causing chart update
@@ -208,18 +260,14 @@ const createlineChart = () => {
 */
 const updatelineChart = (packet) => {
     numpkts++
-    if(linectr % UPDATE_NUM == 0){
-        times.push((new Date().getTime()) - stTime.getTime())
-        numpktsarr.push(numpkts)
-        lineChart.update()
-    }
 }
 
 createBarChart()
-packetStream(updateBarChart)
+livePacketStream(updateBarChart)
 
 createPieChart()
-packetStream(updatePieChart)
+livePacketStream(updatePieChart)
 
 createlineChart()
-packetStream(updatelineChart)
+startLine() // start the timer for line chart
+livePacketStream(updatelineChart)

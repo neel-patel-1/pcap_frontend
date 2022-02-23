@@ -12,7 +12,7 @@ appSegment.appendChild(tableDiv)
 
 let tableHeaders = ["Destination IP" ,"Port", "Source IP",  "Port", "Type"]
 let tableSize = 0
-let TABLE_MAX = 3
+let TABLE_MAX = 20
 
 /**
 @pre None
@@ -50,8 +50,9 @@ const addPacket = (packet) => {
     let tableRow = document.createElement('tr')
     tableRow.id = 'tableBodyRow'
     
+    //replace 
     let sessCheck = ""
-    if(Object.keys(packet).length > 5)
+    if(Object.keys(packet).find( (k) => k == 4))
         sessCheck = packet[4].split(",")[0].split(" ")[0]
     if (!replacePacket(packet)){
         if(tableBody.childElementCount  < TABLE_MAX
@@ -70,13 +71,19 @@ const addPacket = (packet) => {
             sourceIp.innerText = srcIp
             
             let sourcePort = document.createElement('td') 
-            sourcePort.innerText = srcP
+            if(srcP)
+                sourcePort.innerText = srcP
+            else
+                sourcePort.innerText = "Unknown"
 
             let destIp = document.createElement('td')
             destIp.innerText = dstIp
             
             let dstPort = document.createElement('td') 
-            dstPort.innerText = dstP
+            if(dstP)
+                dstPort.innerText = dstP
+            else
+                dstPort.innerText = "Unknown"
 
             let type = document.createElement('td')
             type.innerText = t
@@ -109,7 +116,7 @@ const replacePacket = (packet) => {
     let fields; //row we are selecting
 
     //Parse Packet
-    if(Object.keys(packet).length > 4){
+    if(Object.keys(packet).find( (k) => k == 4)){
         let TCPInf = packet[4].split(",")
         let srcP = TCPInf[2].split(":")[1]
         let dstP = TCPInf[2].split(":")[1]
@@ -129,6 +136,7 @@ const replacePacket = (packet) => {
                     // console.log("replace row ", i, " ip: ", fields[j].innerText)
                     fields[1].innerText = srcIp
                     fields[0].innerText = dstIp
+                    console.log("replaced packet")
                     return true
                 }
             }

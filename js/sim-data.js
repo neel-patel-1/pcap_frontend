@@ -94,7 +94,7 @@ const querySimServer = () =>{
             .then(response => response.json())
             .then(result => {
                 if(result["id"] > lID){//ensure packet is new
-                    console.log(result)
+                    // console.log(result)
                     callbacks.map( (callback) => 
                     {
                         callback(result["packet"])
