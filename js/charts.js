@@ -34,7 +34,8 @@ const createBarChart = () => {
     barCanvas = document.getElementById("barCanvas")
     const barCtx = barCanvas.getContext('2d')
 
-	barCanvas.setAttribute("width", "400px")
+	barCanvas.setAttribute("width", "38%")
+    barCanvas.setAttribute("height", "38%")
 
     barChart = new Chart( barCtx, {
         type: "bar",
@@ -96,7 +97,11 @@ let piectr = 0
 const createPieChart = () => {
     
     pieCanvas=document.getElementById("pieCanvas")
-    pieCtx = pieCanvas.getContext('2d')
+    const pieCtx = pieCanvas.getContext('2d')
+
+    pieCanvas.setAttribute("width", "38%")
+    pieCanvas.setAttribute("height", "38%")
+
     pieChart = new Chart( pieCtx, {
         type: "doughnut",
         data: {
@@ -140,8 +145,81 @@ const updatePieChart = (packet) => {
     }
 }
 
+const stTime = new Date()
+let times = []
+let numpkts = 0
+let numpktsarr = []
+
+let lineCanvas
+let lineChart
+let linectr = 0
+
+let lineColors = prots.map( (p,a) => colors[a])
+
+/**
+@pre None
+@post line-Chart added to the app div
+@returns None
+*/
+const createlineChart = () => {
+    lineCanvas = document.getElementById("lineCanvas")
+    const lineCtx = lineCanvas.getContext('2d')
+
+	lineCanvas.setAttribute("width", "38%")
+    lineCanvas.setAttribute("height", "38%")
+
+    lineChart = new Chart( lineCtx, {
+        type: "line",
+        data: {
+            labels: times,
+            datasets: [{
+                backgroundColor: lineColors,
+                label: null,
+                data: numpktsarr,
+				fill: false
+            }]
+        },
+        options: {
+            // scales:{
+            //     beginAtZero:true,
+            // },
+            legend:{
+                display: false
+            },
+            animation: {
+                duration: 0, // general animation time
+            },            
+            tooltips: {enabled: false},
+            hover: {mode: null},
+			layout: {
+				padding: {
+					top: 10
+				}
+			}
+            
+        }
+    })
+}
+
+/*
+@pre: line Chart created
+@param: packet new packet causing chart update
+@post: chart is updated to reflect updated stats
+*/
+const updatelineChart = (packet) => {
+    numpkts++
+    if(linectr % UPDATE_NUM == 0){
+        times.push((new Date().getTime()) - stTime.getTime())
+        numpktsarr.push(numpkts)
+        lineChart.update()
+    }
+}
+
 createBarChart()
 packetStream(updateBarChart)
 
 createPieChart()
 packetStream(updatePieChart)
+
+createlineChart()
+packetStream(updatelineChart)

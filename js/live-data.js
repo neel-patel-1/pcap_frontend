@@ -50,47 +50,50 @@ const addPacket = (packet) => {
     let tableRow = document.createElement('tr')
     tableRow.id = 'tableBodyRow'
     
-    let sessCheck = packet[4].split(",")[0].split(" ")[0]
+    let sessCheck = ""
+    if(Object.keys(packet).length > 5)
+        sessCheck = packet[4].split(",")[0].split(" ")[0]
+    if (!replacePacket(packet)){
+        if(tableBody.childElementCount  < TABLE_MAX
+                && sessCheck == "TCP"){
+            //parse pack info
+            let TCPInf = packet[4].split(",")
+            let srcP = TCPInf[2].split(":")[1]
+            let dstP = TCPInf[3].split(":")[1]
+            let t = TCPInf[1]
+            
+            let netInf = packet[3].split(",")
+            let srcIp = netInf[1].split(":")[1]
+            let dstIp = netInf[2].split(":")[1]
+            
+            let sourceIp = document.createElement('td') 
+            sourceIp.innerText = srcIp
+            
+            let sourcePort = document.createElement('td') 
+            sourcePort.innerText = srcP
 
-    if(tableBody.childElementCount  < TABLE_MAX
-    		&& sessCheck == "TCP"){
-        //parse pack info
-        let TCPInf = packet[4].split(",")
-        let srcP = TCPInf[2].split(":")[1]
-        let dstP = TCPInf[3].split(":")[1]
-        let t = TCPInf[1]
-        
-        let netInf = packet[3].split(",")
-        let srcIp = netInf[1].split(":")[1]
-        let dstIp = netInf[2].split(":")[1]
-        
-        let sourceIp = document.createElement('td') 
-        sourceIp.innerText = srcIp
-        
-        let sourcePort = document.createElement('td') 
-        sourcePort.innerText = srcP
+            let destIp = document.createElement('td')
+            destIp.innerText = dstIp
+            
+            let dstPort = document.createElement('td') 
+            dstPort.innerText = dstP
 
-        let destIp = document.createElement('td')
-        destIp.innerText = dstIp
-        
-        let dstPort = document.createElement('td') 
-        dstPort.innerText = dstP
+            let type = document.createElement('td')
+            type.innerText = t
 
-        let type = document.createElement('td')
-        type.innerText = t
-
-        tableRow.append(destIp, dstPort, sourceIp, sourcePort, type)
-        tableBody.append(tableRow)
-        tableSize++
-    }
-    else{
-        if (!replacePacket(packet)){
+            tableRow.append(destIp, dstPort, sourceIp, sourcePort, type)
+            tableBody.append(tableRow)
+            tableSize++
+        }
+        if(tableBody.childElementCount > TABLE_MAX){
+            
             tableBody.firstChild.id = 'remQueue'
             $('#remQueue').children('td, th')
                 .animate({ padding: 0 })
                 .wrapInner('<div />')
                 .children()
                 .slideUp(function() { $(this).closest('tr').remove(); });
+        
         }
     }
 }
@@ -106,26 +109,28 @@ const replacePacket = (packet) => {
     let fields; //row we are selecting
 
     //Parse Packet
-    let TCPInf = packet[4].split(",")
-    let srcP = TCPInf[2].split(":")[1]
-    let dstP = TCPInf[2].split(":")[1]
-    let t = TCPInf[1]
-    
-    let netInf = packet[3].split(",")
-    let srcIp = netInf[1].split(":")[1]
-    let dstIp = netInf[2].split(":")[1]
+    if(Object.keys(packet).length > 4){
+        let TCPInf = packet[4].split(",")
+        let srcP = TCPInf[2].split(":")[1]
+        let dstP = TCPInf[2].split(":")[1]
+        let t = TCPInf[1]
+        
+        let netInf = packet[3].split(",")
+        let srcIp = netInf[1].split(":")[1]
+        let dstIp = netInf[2].split(":")[1]
 
 
-    for (let i = 1; i < children.length; i++) {
-        fields = children[i].children;//check each row
-        for(let j=0; j<2; j++){
-            if(fields[j].innerText == srcIp || fields[j].innerText == dstIp)
-            {//row replaced by newer connection
-                fields.id = 'moveUp'
-                // console.log("replace row ", i, " ip: ", fields[j].innerText)
-                fields[1].innerText = srcIp
-                fields[0].innerText = dstIp
-                return true
+        for (let i = 1; i < children.length; i++) {
+            fields = children[i].children;//check each row
+            for(let j=0; j<2; j++){
+                if(fields[j].innerText == srcIp || fields[j].innerText == dstIp)
+                {//row replaced by newer connection
+                    fields.id = 'moveUp'
+                    // console.log("replace row ", i, " ip: ", fields[j].innerText)
+                    fields[1].innerText = srcIp
+                    fields[0].innerText = dstIp
+                    return true
+                }
             }
         }
     }

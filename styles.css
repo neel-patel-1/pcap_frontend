@@ -65,10 +65,11 @@ table.liveTable td:hover {background: orangered;}
 	box-sizing: border-box;
 	position: relative;
 	width: 40%;
-    height: 50%;
-	/* display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); */
-	grid-gap: 10px;
+    display: inline-block;
+    /* height: 50%;
+    */
+	/* grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); */
+	/* grid-gap: 10px; */
 }
 
 /* Packet Visualizer App */

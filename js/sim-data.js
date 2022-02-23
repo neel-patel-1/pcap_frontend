@@ -18,6 +18,11 @@ let srcs = Array.apply(null, Array(5)).map(function () {
 const REPEAT_CHANCE = 0.5
 
 
+const INTERVAL = 1000 //Poll Rate in millis
+let lID = 0 // last seen packet
+let callbacks = []
+
+
 /*-------------------Sim Functions---------------------*/
 
 /*
@@ -77,15 +82,37 @@ function packetStream(packetResponder){
     genPacket.then( (packet) => {packetResponder(packet); packetStream(packetResponder)} )
 }
 
-// function packResponse(packet){console.log(packet)}
-// packetStream(packResponse)
+const querySimServer = () =>{
+    setInterval(
+        () => {
+            fetch("http://localhost:5000/PacketStats",{
+                method: "GET",
+                headers: {
+                    'Content-Type':'1',
+                },
+            })
+            .then(response => response.json())
+            .then(result => {
+                if(result["id"] > lID){//ensure packet is new
+                    console.log(result)
+                    callbacks.map( (callback) => 
+                    {
+                        callback(result["packet"])
+                        lID = result["id"] 
+                    })
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error)
+                return;
+            })
+        },
+    INTERVAL)
+}
 
 
 /*-------------------Server Fetch Functions---------------------*/
-const INTERVAL = 2000 //Poll Rate in millis
-let lID = 0 // last seen packet
-let samp
-let callbacks = []
+
 
 /**
  * @post all registered callbacks executed with packet argument from server query every INTERVAL
@@ -124,4 +151,5 @@ const livePacketStream = (callback) => {
     callbacks.push(callback) // register to set of functions needed to be called
     
 }
-queryServer();
+// queryServer();
+querySimServer()

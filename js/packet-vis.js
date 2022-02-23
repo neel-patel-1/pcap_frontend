@@ -16,6 +16,11 @@ const ctx = canvas.getContext('2d')
 ctx.lineWidth = 10
 ctx.textAlign = "center"
 
+//color map
+let protColor = new Map()
+//safety packet in case of redraw
+let lpack
+
 visDiv.append(canvas)
 
 const drawLayer = (x, width, text) => {
@@ -23,33 +28,55 @@ const drawLayer = (x, width, text) => {
     let height = (canvas.height * (3/5))
     
     ctx.strokeRect(x, ly, width, height)
-    height = (canvas.height * (3/5) - ctx.lineWidth * 2)
     let txts = text.split(",")
     let buff = ctx.lineWidth
 
-    let fontSize = 12
-    ctx.font = `${fontSize}px san-serif`;
-    ctx.fillStyle = 'green';
+    let fontSize = 24
+    ctx.font = `${fontSize}px system-ui bold`
+    
+
+    console.log(text.split(" ")[0])
+    if(!protColor.has(text.split(" ")[0])){
+        protColor.set(text.split(" ")[0], generateDarkColorHex())
+    }
+    ctx.fillStyle = protColor.get(text.split(" ")[0])
+    
+    ctx.fillRect(x+ctx.lineWidth/2, ly + ctx.lineWidth/2, width - ctx.lineWidth, height- ctx.lineWidth)
 
     txts.map( (txt, i) => {
-        console.log(txt)
-        ctx.fillText(txt, x + width/2, ly + buff + (i+1) * ( (height - ctx.lineWidth *2)/txts.length) )
+        ctx.fillStyle = 'white';
+        ctx.fillText(txt, x + width/2, ly + buff + (i+1) * ( (height - ctx.lineWidth *4)/txts.length), width )
     })
 }
 
 
 const drawPacket = ( packet ) => {
+    //save packet in case of redraw
+    lpack = packet
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     pad = canvas.width / 10
     lWid =(canvas.width - (2 * pad)) / Object.keys(packet).length
-    Object.keys(packet).map(layer => drawLayer( pad + (parseInt(layer) - 2)  * lWid, lWid, packet[layer]))
+    Object.keys(packet).map( (layer,i) => drawLayer( pad + /*(parseInt(layer) - 2)*/ i  * lWid, lWid, packet[layer]))
     
+}
+
+function onWindowResize(){
+    canvas.setAttribute('width', String(window.innerWidth * (4/5)))
+    canvas.setAttribute('height', String(window.innerHeight * (2/5)))
+    ctx.lineWidth = 10
+    ctx.textAlign = "center"
+    drawPacket(lpack)
+}
+
+function generateDarkColorHex() {//https://helderesteves.com/generating-random-colors-js/
+    let color = "#";
+    for (let i = 0; i < 3; i++)
+      color += ("0" + Math.floor(Math.random() * Math.pow(16, 2) / 2).toString(16)).slice(-2);
+    return color;
 }
 
 livePacketStream(drawPacket);
 
-// window.addEventListener('resize', onWindowResize, false);
-// function onWindowResize(){
-//     drawLayer()
-// }
+window.addEventListener('resize', onWindowResize, false);
+
 
