@@ -53,6 +53,8 @@ table.liveTable tr {height: 25px;}
 table.liveTable td {height: 25px;}
 table.liveTable td:hover {background: orangered;}
 
+.changeColor {background: orangered}
+
 /*charts app*/
 
 .grid-container {
