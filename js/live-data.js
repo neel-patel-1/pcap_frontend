@@ -50,53 +50,55 @@ const addPacket = (packet) => {
     let tableRow = document.createElement('tr')
     tableRow.id = 'tableBodyRow'
     
-    //replace comma in tcp type
-    let TCPInf = packet[4].replace(/\[([A-Z]+), ([A-Z]+)\]/, '[$1 $2]').split(", ")
-    console.log(TCPInf)
-    if (TCPInf[0].split(" ")[0] == "TCP"){
-        
-        let srcP = TCPInf[2].split(": ")[1]
-        let dstP = TCPInf[3].split(": ")[1]
-        let t = TCPInf[1]
-
-        //parse network layer info
-        let netInf = packet[3].split(", ")
-        let srcIp = netInf[1].split(": ")[1]
-        let dstIp = netInf[2].split(": ")[1]
-        if(!replacePacket(TCPInf, srcIp, dstIp) && tableBody.childElementCount  < TABLE_MAX ){
-
-            let sourceIp = document.createElement('td') 
-            sourceIp.innerText = srcIp
+    if(Object.keys(packet).find( (l) => l == 4)){
+        //replace comma in tcp type
+        let TCPInf = packet[4].replace(/\[([A-Z]+), ([A-Z]+)\]/, '[$1 $2]').split(", ")
+        console.log(TCPInf)
+        if (TCPInf[0].split(" ")[0] == "TCP" && TCPInf.length > 3){
             
-            let sourcePort = document.createElement('td') 
-            if(srcP)
-                sourcePort.innerText = srcP
-            else
-                sourcePort.innerText = "Unknown"
+            let srcP = TCPInf[2].split(": ")[1]
+            let dstP = TCPInf[3].split(": ")[1]
+            let t = TCPInf[1]
 
-            let destIp = document.createElement('td')
-            destIp.innerText = dstIp
-            
-            let dstPort = document.createElement('td') 
-            if(dstP)
-                dstPort.innerText = dstP
-            else
-                dstPort.innerText = "Unknown"
+            //parse network layer info
+            let netInf = packet[3].split(", ")
+            let srcIp = netInf[1].split(": ")[1]
+            let dstIp = netInf[2].split(": ")[1]
+            if(!replacePacket(TCPInf, srcIp, dstIp) && tableBody.childElementCount  < TABLE_MAX ){
 
-            let type = document.createElement('td')
-            type.innerText = t
+                let sourceIp = document.createElement('td') 
+                sourceIp.innerText = srcIp
                 
-            tableRow.append(destIp, dstPort, sourceIp, sourcePort, type)
-            tableBody.append(tableRow)
-            tableSize++
-        }
-        if(tableBody.childElementCount >= TABLE_MAX){
-            tableBody.firstChild.id = 'remQueue'
-            $('#remQueue').children('td, th')
-                .animate({ padding: 0 })
-                .wrapInner('<div />')
-                .children()
-                .slideUp(function() { $(this).closest('tr').remove(); });
+                let sourcePort = document.createElement('td') 
+                if(srcP)
+                    sourcePort.innerText = srcP
+                else
+                    sourcePort.innerText = "Unknown"
+
+                let destIp = document.createElement('td')
+                destIp.innerText = dstIp
+                
+                let dstPort = document.createElement('td') 
+                if(dstP)
+                    dstPort.innerText = dstP
+                else
+                    dstPort.innerText = "Unknown"
+
+                let type = document.createElement('td')
+                type.innerText = t
+                    
+                tableRow.append(destIp, dstPort, sourceIp, sourcePort, type)
+                tableBody.append(tableRow)
+                tableSize++
+            }
+            if(tableBody.childElementCount >= TABLE_MAX){
+                tableBody.firstChild.id = 'remQueue'
+                $('#remQueue').children('td, th')
+                    .animate({ padding: 0 })
+                    .wrapInner('<div />')
+                    .children()
+                    .slideUp(function() { $(this).closest('tr').remove(); });
+            }
         }
     }
 }

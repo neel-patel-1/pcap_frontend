@@ -8,6 +8,9 @@ body, html{
     box-sizing:border-box;
     font-family:sans-serif;
 }
+#app{
+    vertical-align: middle;
+}
 
 /*menu styling*/
 .menu-bar{
@@ -41,16 +44,36 @@ table.liveTable{
     width: 80%;
     text-align: center;
     color: whitesmoke;
+    font-family: sans-serif;
+    border: 2px solid rgb(200, 200, 200);
+    vertical-align: middle;
 }
+
+.liveTableBody tr:nth-child(odd) {
+    background-color: rgb(126, 122, 122);
+    padding:4%;
+  }
+  
+  .liveTableBody tr:nth-child(even) {
+    background-color: rgb(185, 183, 183);
+    padding:4%;
+  }
 
 .liveTableHeaderRow{
     color: darkorange;
     font-weight: bold;
     height: 50px;
+    border: 1px solid rgb(190, 190, 190);
+    padding: 10px;
 }
 
 table.liveTable tr {height: 25px;}
-table.liveTable td {height: 25px;}
+table.liveTable td {
+    height: 25px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 table.liveTable td:hover {background: orangered;}
 
 .changeColor {background: orangered}
