@@ -53,7 +53,7 @@ const addPacket = (packet) => {
     if(Object.keys(packet).find( (l) => l == 4)){
         //replace comma in tcp type
         let TCPInf = packet[4].replace(/\[([A-Z]+), ([A-Z]+)\]/, '[$1 $2]').split(", ")
-        console.log(TCPInf)
+        // console.log(TCPInf)
         if (TCPInf[0].split(" ")[0] == "TCP" && TCPInf.length > 3){
             
             let srcP = TCPInf[2].split(": ")[1]

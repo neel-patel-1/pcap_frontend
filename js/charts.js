@@ -111,7 +111,7 @@ const updateBarChart = (packet) => {
                 yValues[xValues.indexOf(l7)]++
             }
         }
-        console.log(xValues, yValues)
+        // console.log(xValues, yValues)
     }
     
     if(barctr % UPDATE_NUM == 0){
@@ -172,7 +172,7 @@ const updatePieChart = (packet) => {
         if(packet[4] != null){
             let l4 = packet[4].split(" ")[0]
             if( !(xLLP.find((k) => k == l4)) ){
-                console.log("new l4")
+                // console.log("new l4")
                 xLLP.push(l4)
                 yLLP.push(1)
             }else{
@@ -237,7 +237,11 @@ const createlineChart = () => {
 				padding: {
 					top: 10
 				}
-			}
+			},
+            plugins: {
+                display: true,
+                text: 'Total Traffic'
+            }
             
         }
     })
@@ -247,7 +251,7 @@ const createlineChart = () => {
 /* Line chart needs to control its own x axis to keep time intervals consistent*/
 const startLine = () => {
     setInterval(() => {
-        times.push((new Date().getTime()) - stTime.getTime())
+        times.push(String(Math.round(((new Date().getTime()) - stTime.getTime())/1000))+'s')
         numpktsarr.push(numpkts)
         lineChart.update()
     }, INTERVAL)

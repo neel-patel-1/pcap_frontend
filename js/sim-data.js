@@ -18,7 +18,7 @@ let srcs = Array.apply(null, Array(5)).map(function () {
 const REPEAT_CHANCE = 0.5
 
 
-const INTERVAL = 1000 //Poll Rate in millis
+const INTERVAL = 100 //Poll Rate in millis
 let lID = 0 // last seen packet
 let callbacks = []
 
@@ -93,13 +93,8 @@ const querySimServer = () =>{
             })
             .then(response => response.json())
             .then(result => {
-                if(result["id"] > lID){//ensure packet is new
-                    // console.log(result)
-                    callbacks.map( (callback) => 
-                    {
-                        callback(result["packet"])
-                        lID = result["id"] 
-                    })
+                if(result["id"] > lID){
+                    callbacks.map( (callback) => result["packetList"].map( (pkt) => callback(pkt["packet"])))
                 }
             })
             .catch(error => {
@@ -127,8 +122,8 @@ const queryServer = () =>{
                 if(result["id"] > lID){//ensure packet is new
                     callbacks.map( (callback) => 
                     {
-                        callback(result["packet"])
-                        lID = result["id"] 
+                        result["packetList"].map( (pkt) => {
+                            callback(pkt["packet"])})
                     })
                 }
             })
@@ -150,6 +145,31 @@ const queryServer = () =>{
 const livePacketStream = (callback) => {
     callbacks.push(callback) // register to set of functions needed to be called
     
+}
+
+const testQuery = (needsCtr) =>{
+    setTimeout(
+        () => {
+            fetch("http://localhost:5000/PacketStats",{
+                method: "GET",
+                headers: {
+                    'Content-Type':'1',
+                },
+            })
+            .then(response => response.json())
+            .then(result => {
+                if(needsCtr){
+                    console.log(result["id"])
+                    result["packetList"].map((pkt) => console.log(pkt["packet"]))
+                }
+                console.log(result)
+            })
+            .catch(error => {
+                console.error('Error:', error)
+                return;
+            })
+        },
+    INTERVAL)
 }
 // queryServer();
 querySimServer()
