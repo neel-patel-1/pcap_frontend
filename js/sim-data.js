@@ -18,7 +18,7 @@ let srcs = Array.apply(null, Array(5)).map(function () {
 const REPEAT_CHANCE = 0.5
 
 
-const INTERVAL = 100 //Poll Rate in millis
+const INTERVAL = 1000 //Poll Rate in millis
 let lID = 0 // last seen packet
 let callbacks = []
 
@@ -92,9 +92,10 @@ const querySimServer = () =>{
                 },
             })
             .then(response => response.json())
-            .then(result => {
+            .then(result => {                
                 if(result["id"] > lID){
-                    callbacks.map( (callback) => result["packetList"].map( (pkt) => callback(pkt["packet"])))
+                    if(Object.keys(result).find( (l) => l == "packetList"))
+                        callbacks.map( (callback) => result["packetList"].map( (pkt) => callback(pkt["packet"])))
                 }
             })
             .catch(error => {

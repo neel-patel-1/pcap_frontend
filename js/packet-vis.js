@@ -19,7 +19,7 @@ ctx.textAlign = "center"
 //color map
 let protColor = new Map()
 //safety packet in case of redraw
-let lpack
+let lpack = null
 
 visDiv.append(canvas)
 
@@ -65,15 +65,11 @@ function onWindowResize(){
     canvas.setAttribute('height', String(window.innerHeight * (2/5)))
     ctx.lineWidth = 10
     ctx.textAlign = "center"
-    drawPacket(lpack)
+    if(lpack != null)
+        drawPacket(lpack)
 }
 
-function generateDarkColorHex() {//https://helderesteves.com/generating-random-colors-js/
-    let color = "#";
-    for (let i = 0; i < 3; i++)
-      color += ("0" + Math.floor(Math.random() * Math.pow(16, 2) / 2).toString(16)).slice(-2);
-    return color;
-}
+
 
 livePacketStream(drawPacket);
 

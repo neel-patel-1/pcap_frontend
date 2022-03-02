@@ -10,8 +10,8 @@ https://stackoverflow.com/questions/57090660/resizing-chart-issue-with-css-grid
 
 /*Selecting the corresponding div for the app*/
 //create bar chart updating upon arrival of every UPDATE_NUM packets
-let pieColors = ["red", "green","blue"]
-let barColors = ["orange","brown", "purple"]
+let pieColors = ["0xFF0000", "green"]
+let barColors = [generateLightColorHex(),generateLightColorHex(), generateLightColorHex()]
 
 let UPDATE_NUM = 1
 
@@ -21,8 +21,8 @@ let barCanvas
 let barChart
 let barctr = 0
 
-let xValues = [] 
-let yValues = []
+let xValues = [ "TLS", "Payload", "Unknown"] 
+let yValues = [0,0,0]
 
 /**
 @pre None
@@ -48,6 +48,7 @@ const createBarChart = () => {
             }]
         },
         options: {
+            responsive:true,
             scales:{
                 yAxes: [{
                     ticks: {
@@ -87,6 +88,7 @@ const updateBarChart = (packet) => {
                 // console.log("new l5")
                 xValues.push(l5)
                 yValues.push(1)
+                barColors.push(generateLightColorHex())
             }else{
                 yValues[xValues.indexOf(l5)]++
             }
@@ -97,6 +99,7 @@ const updateBarChart = (packet) => {
                 // console.log("new l6")
                 xValues.push(l6)
                 yValues.push(1)
+                barColors.push(generateLightColorHex())
             }else{
                 yValues[xValues.indexOf(l6)]++
             }
@@ -107,6 +110,7 @@ const updateBarChart = (packet) => {
                 // console.log("new l7")
                 xValues.push(l7)
                 yValues.push(1)
+                barColors.push(generateLightColorHex())
             }else{
                 yValues[xValues.indexOf(l7)]++
             }
@@ -175,6 +179,7 @@ const updatePieChart = (packet) => {
                 // console.log("new l4")
                 xLLP.push(l4)
                 yLLP.push(1)
+                pieColors.push(generateDarkColorHex())
             }else{
                 yLLP[xLLP.indexOf(l4)]++
             }
@@ -222,9 +227,13 @@ const createlineChart = () => {
             }]
         },
         options: {
-            // scales:{
-            //     beginAtZero:true,
-            // },
+            scales:{
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
             legend:{
                 display: false
             },
@@ -249,12 +258,18 @@ const createlineChart = () => {
 
 
 /* Line chart needs to control its own x axis to keep time intervals consistent*/
+const LIMIT = 12
+const UPDATE = 1000
 const startLine = () => {
     setInterval(() => {
-        times.push(String(Math.round(((new Date().getTime()) - stTime.getTime())/1000))+'s')
+        times.push(Math.round(((new Date().getTime()) - stTime.getTime())/1000))
         numpktsarr.push(numpkts)
+        if(times.length > LIMIT){
+            times = times.filter( (i,j) => j%2==0)
+            numpktsarr = numpktsarr.filter( (i,j) => j%2==0)
+        }
         lineChart.update()
-    }, INTERVAL)
+    }, UPDATE)
 }
 
 /*
