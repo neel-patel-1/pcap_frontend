@@ -29,4 +29,15 @@ function menuInit(){
     
     }
 }
+
+document.querySelector("#clktoggle").addEventListener('change', () =>{
+    USELIVE=!USELIVE
+    if(!USELIVE){
+        clearInterval(intervalID)
+        querySimServer()
+    }else{
+        clearInterval(intervalID)
+        queryServer()
+    }
+})
 menuInit();

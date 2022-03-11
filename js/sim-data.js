@@ -82,9 +82,14 @@ function packetStream(packetResponder){
     genPacket.then( (packet) => {packetResponder(packet); packetStream(packetResponder)} )
 }
 
+
+let intervalID; //store interval
+
 const querySimServer = () =>{
-    setInterval(
+    intervalID = setInterval(
         () => {
+            if(USELIVE) // check if user toggled live data
+                clearInterval(intervalID)
             fetch("http://localhost:5000/PacketStats",{
                 method: "GET",
                 headers: {
@@ -115,8 +120,10 @@ const querySimServer = () =>{
  * milliseconds
  */
 const queryServer = () =>{
-    setTimeout(
+    intervalID = setInterval(
         () => {
+            if(!USELIVE) // check if user untoggled live data
+                clearInterval(intervalID)
             fetch("http://localhost:5000/PacketStats", {method: "GET"})
             .then(response => response.json())
             .then(result => {
@@ -131,7 +138,7 @@ const queryServer = () =>{
             .catch(error => {
                 console.error('Error:', error)
             })
-            queryServer();
+            
         },
     INTERVAL)
 }
@@ -149,7 +156,7 @@ const livePacketStream = (callback) => {
 }
 
 const testQuery = (needsCtr) =>{
-    setTimeout(
+    setInterval(
         () => {
             fetch("http://localhost:5000/PacketStats",{
                 method: "GET",

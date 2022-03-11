@@ -1,3 +1,5 @@
+let USELIVE = false
+
 function generateDarkColorHex() {//https://helderesteves.com/generating-random-colors-js/
     let color = "#";
     for (let i = 0; i < 3; i++)
