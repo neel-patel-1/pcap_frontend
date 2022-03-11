@@ -10,16 +10,24 @@
     <body>
         <div class="menu-bar">
             <ul id="menu-options">
+                
                 <li><a href='#' id="select_home"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
                 <li><a href='#' id="select_live"><i class="fa fa-arrows-alt" aria-hidden="true"></i> Live Connections</a>
                 <li><a href='#' id="select_charts"><i class="fa fa-arrows-alt" aria-hidden="true"></i> Test App</a>
                 <li><a href='#' id="select_packet"><i class="fa fa-arrows-alt" aria-hidden="true"></i> Packet Visualizer</a>
+                <li> <!-- toggle live data-->
+                    <label class="switch" id="toggle">
+                        <input type="checkbox">
+                        <div class="slider round">
+                    </label>
+                </li>
                 <!--Append New Apps Here-->
             </ul>
         </div>
-
+        
         <div id="app">
-
+            <!-- Toggle between live and simulated data-->
+            
             <div id="home" hidden=true></div>
             <div id="live" hidden=true></div>
             <div id="charts" hidden=true>
@@ -43,6 +51,8 @@
             <div id="packet" hidden="true"></div>
 			<!--Also Append New Apps Here-->
 		</div>
+        
+        
 
         <script src='js/utils.js'></script>
         <script src='js/menu-interact.js'></script>
