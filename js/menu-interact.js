@@ -37,7 +37,7 @@ document.querySelector("#clktoggle").addEventListener('change', () =>{
         querySimServer()
     }else{
         clearInterval(intervalID)
-        queryServer()
+        // queryServer()
     }
 })
 menuInit();

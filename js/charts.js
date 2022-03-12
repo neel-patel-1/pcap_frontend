@@ -12,7 +12,7 @@ https://stackoverflow.com/questions/57090660/resizing-chart-issue-with-css-grid
 //create bar chart updating upon arrival of every UPDATE_NUM packets
 let pieColors = ["0xFF0000", "green"]
 let barColors = [generateLightColorHex(),generateLightColorHex(), generateLightColorHex()]
-
+let lineColor = ["0xFFFFFF"]
 let UPDATE_NUM = 1
 
 
@@ -50,7 +50,25 @@ const createBarChart = () => {
         options: {
             responsive:true,
             scales:{
+                xAxes:[{
+                    scaleLabel:{
+                        font: {
+                            weight: 'bold',
+                            size:14
+                        },
+                        display: true,
+                        labelString: 'Protocol'
+                    }
+                }],
                 yAxes: [{
+                    scaleLabel:{
+                        font: {
+                            weight: 'bold',
+                            size:14
+                        },
+                        display: true,
+                        labelString: '# Packets'
+                    },
                     ticks: {
                         beginAtZero: true
                     }
@@ -220,7 +238,7 @@ const createlineChart = () => {
         data: {
             labels: times,
             datasets: [{
-                backgroundColor: lineColors,
+                backgroundColor: lineColor,
                 label: null,
                 data: numpktsarr,
 				fill: false
@@ -228,11 +246,21 @@ const createlineChart = () => {
         },
         options: {
             scales:{
+                xAxes:[{
+                    scaleLabel:{
+                        display: true,
+                        labelString: 'Time'
+                    }
+                }],
                 yAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: '# Packets'
+                    },
                     ticks: {
                         beginAtZero: true
                     }
-                }]
+                }],
             },
             legend:{
                 display: false
@@ -262,11 +290,15 @@ const LIMIT = 12
 const UPDATE = 1000
 const startLine = () => {
     setInterval(() => {
-        times.push(Math.round(((new Date().getTime()) - stTime.getTime())/1000))
+        // times.push(Math.round(((new Date().getTime()) - stTime.getTime())/1000))
+        times.push((new Date().toGMTString()).split(" ")[4])
+
         numpktsarr.push(numpkts)
         if(times.length > LIMIT){
             times = times.filter( (i,j) => j%2==0)
+            lineChart.data.labels = times
             numpktsarr = numpktsarr.filter( (i,j) => j%2==0)
+            lineChart.data.datasets[0].data = numpktsarr
         }
         lineChart.update()
     }, UPDATE)
