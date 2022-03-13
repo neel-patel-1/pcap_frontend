@@ -1,4 +1,7 @@
+/* Globals and utility functions */
 let USELIVE = false
+let INTERVAL = 1000 //Poll Rate in millis
+let intervalID; //store interval ID of last used query function's setInterval() return
 
 function generateDarkColorHex() {//https://helderesteves.com/generating-random-colors-js/
     let color = "#";

@@ -12,14 +12,16 @@ function menuInit(){
     const menu = document.querySelector('#menu-options')
 
     for (let i = 0; i < menu.children.length; i++) {
-        if(menu.children[i].firstElementChild.id != "toggle"){
+        if(menu.children[i].firstElementChild.id != "toggle" && 
+            menu.children[i].firstElementChild.id != "range"){
             menu.children[i].addEventListener('click', () =>{
                 let showappName = menu.children[i].firstElementChild.id.slice(7)
                 // console.log('show: ', showappName)
                 document.querySelector('#' + showappName).hidden = false
                 for (let j = 0; j < menu.children.length; j++){
                     if(menu.children[j].firstElementChild.id != menu.children[i].firstElementChild.id
-                        && menu.children[j].firstElementChild.id != "toggle"){
+                        && menu.children[j].firstElementChild.id != "toggle"
+                        && menu.children[i].firstElementChild.id != "range"){
                         let hideappName = menu.children[j].firstElementChild.id.slice(7)
                         document.querySelector('#' + hideappName).hidden = true
                     }
@@ -37,7 +39,14 @@ document.querySelector("#clktoggle").addEventListener('change', () =>{
         querySimServer()
     }else{
         clearInterval(intervalID)
-        // queryServer()
+        queryServer()
+    }
+})
+document.querySelector("#myRange").addEventListener('input', (e) => {
+    INTERVAL = e.target.value
+    if(!USELIVE){
+        clearInterval(intervalID)
+        querySimServer()
     }
 })
 menuInit();
