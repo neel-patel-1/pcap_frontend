@@ -43,7 +43,7 @@ document.querySelector("#clktoggle").addEventListener('change', () =>{
     }
 })
 document.querySelector("#myRange").addEventListener('input', (e) => {
-    INTERVAL = e.target.value
+    INTERVAL = (5000 - e.target.value)
     if(!USELIVE){
         clearInterval(intervalID)
         querySimServer()

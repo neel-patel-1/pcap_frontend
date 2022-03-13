@@ -107,7 +107,7 @@ table.liveTable td:hover {background: orangered;}
 }
 
 /* Toggle Switch -- https://www.w3schools.com/howto/howto_css_switch.asp*/
-/* The switch - the box around the slider */
+/* The switch - the box around the toggler */
 
 .switch {  
 margin: auto;
@@ -123,7 +123,7 @@ width: 0;
 height: 0;
 }
 
-.slider {
+.toggler {
 position: absolute;
 cursor: pointer;
 top: 0;
@@ -135,7 +135,7 @@ background-color: #ccc;
 transition: .4s;
 }
 
-.slider:before {
+.toggler:before {
 position: absolute;
 content: "";
 height: 26px;
@@ -147,25 +147,25 @@ background-color: white;
 transition: .4s;
 }
 
-input:checked + .slider {
+input:checked + .toggler {
 background-color: #2196F3;
 }
 
-input:focus + .slider {
+input:focus + .toggler {
 box-shadow: 0 0 1px #2196F3;
 }
 
-input:checked + .slider:before {
+input:checked + .toggler:before {
 -webkit-transform: translateX(26px);
 -ms-transform: translateX(26px);
 transform: translateX(26px);
 }
 
-.slider.round {
+.toggler.round {
 border-radius: 34px;
 }
 
-.slider.round:before {
+.toggler.round:before {
 border-radius: 50%;
 } 
 
@@ -173,7 +173,7 @@ border-radius: 50%;
 .slider {
     /* -webkit-appearance: none;  *//*Override default CSS styles */
     appearance: none;
-    width: 50%; /* Full-width */
+    width: 100%; /* Full-width */
     height: 25px; /* Specified height */
     background: #d3d3d3; /* Grey background */
     outline: none; /* Remove outline */
@@ -185,7 +185,7 @@ border-radius: 50%;
     opacity: 1; /* Fully shown on mouse-over */
   }
   .slider::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Override default look */
+    /*-webkit-appearance: none;*/ /* Override default look */
     appearance: none;
     width: 25px; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
