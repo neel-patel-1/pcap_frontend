@@ -93,17 +93,12 @@ table.liveTable td:hover {background: orangered;}
     display: inline-block;
 	width:40%;
 }
-
 /* Packet Visualizer App */
 #packCanv {
     padding: 0;
     margin: auto;
     display: block;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: relative;
 }
 
 /* Toggle Switch -- https://www.w3schools.com/howto/howto_css_switch.asp*/

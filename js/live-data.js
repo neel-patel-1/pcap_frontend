@@ -61,10 +61,19 @@ const addPacket = (packet) => {
             let t = TCPInf[1]
 
             //parse network layer info
+            let srcIp
+            let dstIp
             let netInf = packet[3].split(", ")
-            let srcIp = netInf[1].split(": ")[1]
-            let dstIp = netInf[2].split(": ")[1]
-            if(!replacePacket(TCPInf, srcIp, dstIp) && tableBody.childElementCount  < TABLE_MAX ){
+            if (netInf[1].includes('Fragment') || netInf[1].includes('fragment')){
+                srcIp = netInf[2].split(": ")[1]
+                dstIp = netInf[3].split(": ")[1]
+            }else{
+                srcIp = netInf[1].split(": ")[1]
+                dstIp = netInf[2].split(": ")[1]
+            }
+            
+            if(!replacePacket(TCPInf, srcIp, dstIp) && tableBody.childElementCount  < TABLE_MAX 
+             && dstIp != "undefined" && srcIp != "undefined"){
 
                 let sourceIp = document.createElement('td') 
                 sourceIp.innerText = srcIp
@@ -115,7 +124,7 @@ const replacePacket = (TCPInf, srcIp, dstIp) => {
 
     //Parse Packet
     let srcP = TCPInf[2].split(":")[1]
-    let dstP = TCPInf[2].split(":")[1]
+    let dstP = TCPInf[3].split(":")[1]
     let t = TCPInf[1]
  
     for (let i = 0; i < children.length; i++) {

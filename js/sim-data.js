@@ -37,10 +37,13 @@ const querySimServer = () =>{
                 },
             })
             .then(response => response.json())
-            .then(result => {                
-                if(result["id"] > lID){
-                    if(Object.keys(result).find( (l) => l == "packetList"))
-                        callbacks.map( (callback) => result["packetList"].map( (pkt) => callback(pkt["packet"])))
+            .then(result => {         
+                if(result != null){
+                    console.log(result)
+                    if(result["id"] > lID){
+                        if(Object.keys(result).find( (l) => l == "packetList"))
+                            callbacks.map( (callback) => result["packetList"].map( (pkt) => callback(pkt["packet"])))
+                    }
                 }
             })
             .catch(error => {
@@ -64,9 +67,13 @@ const queryServer = () =>{
         () => {
             if(!USELIVE) // check if user untoggled live data
                 clearInterval(intervalID)
-            fetch("http://localhost:5000/PacketStats", {method: "GET"})
+            fetch("http://localhost:5000/PacketStats", {
+                method: "GET",
+                
+            })
             .then(response => response.json())
             .then(result => {
+                console.log(result)
                 if(result["id"] > lID){//ensure packet is new
                     callbacks.map( (callback) => 
                     {
@@ -119,5 +126,6 @@ const testQuery = (needsCtr) =>{
         },
     INTERVAL)
 }
-// queryServer();
+//queryServer()
 querySimServer()
+// testQuery(true)
